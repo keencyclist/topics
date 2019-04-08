@@ -25,7 +25,7 @@ I used "stopwords" from the NLTK package. (However, in many of the "best" models
 To create a more attractive and interesting display of the most common words in each subreddit (after excluding the stopwords), I created wordclouds from the wordcloud package. This is the wordcloud for AskScience posts:
 
 
-![WordCloud of AskScience words](https://git.generalassemb.ly/PaulSchimek/submissions/blob/master/project3/images/science.png)
+![WordCloud of AskScience words]https://git.generalassemb.ly/PaulSchimek/submissions/blob/master/project3/images/science.png)
 
 
 The most common words in EatCheapAndHealthy were completely different than AskScience:
