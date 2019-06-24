@@ -22,7 +22,7 @@ I spent some time considering which subreddits to compare and looked throught th
 ### Data Cleaning
 I made sure there were no duplicate posts by using the dropdupicates() property. The 'selftext' field is plain text with HTML removed. However, I removed line break characters ("\n"). I combined the title and text fields into one text field for analysis in order to have more words per observation, and also because in many cases the title is just the first part of the text. I combined the data from the two subreddits into a single dataframe. I created a dummy variable, science, with a value of 1 if the text came from the askscience subreddit and 0 otherwise (that is, from the EatCheapAndHealthy subreddit).
 
-I used "stopwords" from the NLTK package. (However, in many of the "best" models I did not use any stopwords.) I used the FreqDistVisualizer() function from the [Yellowbrick Machine Learning Visualization](https://www.scikit-yb.org/en/latest/) package to graph the top n (default of 50) most frequent words for each subreddit. I noticed that there were some that should not be included, such as  parts of URLs (http,com,org) and a few common words not included in stopwords (e.g., "could").
+I used "stopwords" from the NLTK package. (However, many of the best-performing models did not use stopwords.) I used the FreqDistVisualizer() function from the [Yellowbrick Machine Learning Visualization](https://www.scikit-yb.org/en/latest/) package to graph the top n (default of 50) most frequent words for each subreddit. I noticed that there were some that should not be included, such as  parts of URLs (http,com,org) and a few common words not included in stopwords (e.g., "could").
 
 To create a more attractive and interesting display of the most common words in each subreddit (after excluding the stopwords), I created wordclouds from the wordcloud package. This is the wordcloud for AskScience posts:
 
@@ -41,14 +41,14 @@ I used the CountVectorizer() module from scikit-learn to make word frequencies i
 
 I also tried using Naive Bayes models. The NB model using the Bernouilli distribution and the basic count vectorizer had, after tweaking the parameters, an accuracy of 97.3%. This was improved by using the Multinomial distribution and the TF-IDF vectorizer, which provided an accuracy of 99.1%. 
 
-I also used a support vector machines (SVM) model. This model is less computationally efficient than the other two, but is reasonable fast if one limits the number of features to less than 1,000 (with no loss of accuracy). It requires tweaking the parameters. The best SVM model had an accuracy of 96.1% -- good, but worse than all the previous models.
+I also used a support vector machines (SVM) model. This model is less computationally efficient than the other two, but is reasonably fast if one limits the number of features to less than 1,000 (this restriction does not reduce the SVM model's accuracy). The SVM model accuracy is particulary dependent on selecting hyper-parameters. The best SVM model had an accuracy of 96.1% -- good, but worse than any of the other models.
 
 ### Misclassified Data
-With the best model, and a testing set of 30%, there were only 4 misclassified posts, as follows:
+With the best model (Naive Bayes with TF-IDF), there were only 4 misclassified posts in the testing set (30% of the data):
 
-  - two very short posts inluding one that was only 9 words.
+  - two very short posts inluding one that was only nine words.
   - an advertising link.
-  - an AskScience post about chicken and egg allergies that had the word "eating."
+  - an AskScience post about chicken and egg allergies that contained the word "eating."
   
 
 ### Ask Science vs. Ask Historians
@@ -57,14 +57,13 @@ It was fairly easy to produce a very accurate model of two subreddits that were 
 
 ![WordCloud of AskHistorians words](https://git.generalassemb.ly/PaulSchimek/submissions/blob/master/project3/images/history.png)
 
-
-The baseline accuracy was 67% (there were fewer than 1,000 posts available). The best model was again Naive Bayes with a multinomial distribution and the TF-IDF vectorizer. This produced an accuracy of 96.6%. There were only 17 misclassified posts. 
+The baseline accuracy was 67% (there were fewer than 1,000 posts available). The best model was again Naive Bayes with a multinomial distribution and the TF-IDF vectorizer. This produced an accuracy of 96.6%. There were only 17 misclassified posts in the testing data. 
 
 ### Conclusions
 With 1,000 examples of text, we can create a classifier with 97% or better accuracy. This was true both for topics that seem very different (food / cooking and science), and also for more similar, but still distinct, topics (science vs. history). The EDA showed that the categories had distinct vocabularies. 
 
-For both sets of comparisons, the Naive Bayes model using a multinomial distribution and a TF-IDF vectorizer performed best. Tweaking the parameters increases accuracy a few percentage points. However, this adjustment may be specific to the sample at handand may not be robust to new samples.
+For both sets of comparisons, the Naive Bayes model using a multinomial distribution and a TF-IDF vectorizer performed best. Tweaking the parameters increases accuracy a few percentage points. However, this adjustment may be specific to the sample at hand and may not be robust to new samples.
 
-An examination of the misclassified posts suggests that some posts were hard to classify because they were very short or were not on topic (e.g., promotions or announcements). There are also some posts that include vocabulary from another topic area and are thus very difficiult for machine classification.
+An examination of the misclassified posts suggests that some posts were hard to classify because they were very short or were not on topic (e.g., promotions or announcements). There are also some posts that included vocabulary from another topic area and were thus very difficiult for machine classification.
 
-It would make sense to limit the observations to posts of a certain minimum length (e.g., more than 40 words) in order to have a better chance at classifying them.
+It would make sense to limit the observations to posts of a certain minimum length (e.g., more than 40 words) in order to have a better chance at classifying them correctly.
